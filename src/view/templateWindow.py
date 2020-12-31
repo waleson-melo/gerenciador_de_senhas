@@ -1,4 +1,5 @@
 import tkinter as tk
+import tkinter.messagebox as mb
 
 
 class TemplateWindow:
@@ -30,3 +31,16 @@ class TemplateWindow:
 
     def quit(self):
         self.root.destroy()
+
+    # Função de Popup
+    def popup(self, tip=1, tit="Titulo", msg="Menssagem"):
+        if tip == 1:
+            # Info
+            mb.showinfo(title=tit, message=msg)
+        elif tip == 2:
+            # Warning
+            mb.showwarning(title=tit, message=msg)
+        elif tip == 3:
+            mb.showerror(title=tit, message=msg)
+
+
