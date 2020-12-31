@@ -17,6 +17,7 @@ class TemplateWindow:
         if menu:
             self.menuBar()
 
+    # Menu da Janela
     def menuBar(self):
         men_bar = tk.Menu(self.root)
         self.root.config(menu=men_bar)
@@ -29,6 +30,7 @@ class TemplateWindow:
 
         self.file_menu.add_command(label='Sair', command=self.quit)
 
+    # Função de fechar a Janela
     def quit(self):
         self.root.destroy()
 
