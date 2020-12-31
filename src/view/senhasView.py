@@ -120,6 +120,11 @@ class SenhasView(tw.TemplateWindow):
         self.btn_pesquisar_senha.place(relx=0.78, rely=0.58, relwidth=0.18, relheight=0.21)
         self.btn_apagar_senha.place(relx=0.78, rely=0.79, relwidth=0.18, relheight=0.21)
 
+        self.btn_salvar_senha['command'] = self.saveSenha
+        self.btn_alterar_senha['command'] = self.updateSenha
+        self.btn_pesquisar_senha['command'] = self.searchSenha
+        self.btn_apagar_senha['command'] = self.deleteSenha
+
         # Aba 2 Usuario
         self.btn_salvar_usuario = tk.Button(self.fra_top_usuario, text='Salvar', bd=3)
         self.btn_alterar_usuario = tk.Button(self.fra_top_usuario, text='Alterar', bd=3)
@@ -186,3 +191,105 @@ class SenhasView(tw.TemplateWindow):
 
         self.scroll_list_usuarios.place(relx=0.96, rely=0.00,
                                       relwidth=0.04, relheight=0.97)
+
+    def clearEntrySenha(self):
+        self.ent_codigo_senha.delete(0, tk.END)
+        self.ent_nome_senha.delete(0, tk.END)
+        self.ent_login_senha.delete(0, tk.END)
+        self.ent_senha_senha.delete(0, tk.END)
+        self.ent_observacao_senha.delete(0, tk.END)
+
+    def clearEntryUsuario(self):
+        pass
+
+    def clearListSenhas(self):
+        self.trv_senhas.delete(*self.trv_senhas.get_children())
+
+    def clearListUsuarios(self):
+        self.trv_usuarios.delete(*self.trv_usuarios.get_children())
+
+    def getEntrySenha(self):
+        self.codigo_senha = str(self.ent_codigo_senha.get()).strip()
+        self.nome_senha = str(self.ent_nome_senha.get()).strip()
+
+        condi = [
+            self.nome_senha != ''
+        ]
+
+        if all(condi):
+            return True
+        else:
+            return False
+
+    def getEntryUsuario(self):
+        pass
+
+    # Passa os dados das Entrys para o controller salvar no banco
+    def saveSenha(self):
+        x = self.getEntrySenha()
+
+        if x:
+            # Chamar função do controller pra salvar no Banco
+            print('salvar ', self.nome_senha)
+
+            # Se o cadastro for bem sucedido mostrar ok, senao erro
+            if True:
+                self.clearEntrySenha()
+                self.popup(tip=1, tit='ATENÇÂO', msg='Senha salva com sucesso.')
+            else:
+                self.popup(tip=3, tit='ERRO', msg='Erro ao salvar senha.(ERRO)')
+        else:
+            self.popup(tip=2, tit='ATENÇÂO', msg='Preencha os campos obrigatórios.')
+
+    # Passa os dados das Entrys para o controller alterar no banco
+    def updateSenha(self):
+        x = self.getEntrySenha()
+
+        if self.codigo_senha != '':
+            if x:
+                # Chamar função do controller pra alterar no Banco
+                print('alterar ', self.nome_senha)
+
+                # Se a alteração for bem sucedida mostrar ok, senao erro
+                if True:
+                    self.clearEntrySenha()
+                    self.popup(tip=1, tit='ATENÇÂO', msg='Senha alterada com sucesso.')
+                else:
+                    self.popup(tip=3, tit='ERRO', msg='Erro ao alterar senha.(ERRO)')
+            else:
+                self.popup(tip=2, tit='ATENÇÂO', msg='Preencha os campos obrigatórios.')
+        else:
+            self.popup(tip=2, tit='ATENÇÂO', msg='Selecione ou pesquise uma senha.')
+
+    # Passa os dados das Entrys para o controller pesquisar no banco
+    def searchSenha(self):
+        self.getEntrySenha()
+
+        if self.nome_senha != '':
+            # Chamar função do controller pra pesquisar no Banco
+            print('pesquisando')
+
+            # Se o dado for encontrado ok, senao erro
+            if True:
+                print('encontrou')
+            else:
+                self.popup(tip=2, tit='ATENÇÂO', msg='Senha não encontrada.')
+        else:
+            self.popup(tip=2, tit='ATENÇÂO', msg='Preencha o campo Nome para pesquisar senha.')
+
+    # Passa os dados das Entrys para o controller deletar do banco
+    def deleteSenha(self):
+        self.getEntrySenha()
+
+        if self.codigo_senha != '':
+            # Chamar função do controller pra apagar no Banco
+            print('alterar ', self.nome_senha)
+
+            # Se for apagado com sucesso mostrar ok, senao erro
+            if True:
+                self.clearEntrySenha()
+                self.popup(tip=1, tit='ATENÇÂO', msg='Senha apagada com sucesso.')
+            else:
+                self.popup(tip=3, tit='ERRO', msg='Erro ao apagar senha.(ERRO)')
+        else:
+            self.popup(tip=2, tit='ATENÇÂO', msg='Selecione ou pesquise uma senha.')
