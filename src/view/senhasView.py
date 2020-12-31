@@ -192,28 +192,39 @@ class SenhasView(tw.TemplateWindow):
         self.scroll_list_usuarios.place(relx=0.96, rely=0.00,
                                       relwidth=0.04, relheight=0.97)
 
+    # Limpar as entradas das Senhas
     def clearEntrySenha(self):
         self.ent_codigo_senha.delete(0, tk.END)
         self.ent_nome_senha.delete(0, tk.END)
         self.ent_login_senha.delete(0, tk.END)
         self.ent_senha_senha.delete(0, tk.END)
-        self.ent_observacao_senha.delete(0, tk.END)
+        self.ent_observacao_senha.delete('1.0', tk.END)
 
+    # Limpar as estradas do Usuario
     def clearEntryUsuario(self):
         pass
 
+    # Limpar a lista de senhas
     def clearListSenhas(self):
         self.trv_senhas.delete(*self.trv_senhas.get_children())
 
+    # Limpar a lista do usuario
     def clearListUsuarios(self):
         self.trv_usuarios.delete(*self.trv_usuarios.get_children())
 
+    # Pegar os dados das entradas da Senha
     def getEntrySenha(self):
         self.codigo_senha = str(self.ent_codigo_senha.get()).strip()
         self.nome_senha = str(self.ent_nome_senha.get()).strip()
+        self.login_senha = str(self.ent_login_senha.get()).strip()
+        self.senha_senha = str(self.ent_senha_senha.get()).strip()
+        self.observacao_senha = str(self.ent_observacao_senha.get('1.0', tk.END)).strip()
+        self.tipo_senha = self.tip_var_senha.get()
 
         condi = [
-            self.nome_senha != ''
+            self.nome_senha != '',
+            self.login_senha != '',
+            self.senha_senha != ''
         ]
 
         if all(condi):
@@ -221,6 +232,7 @@ class SenhasView(tw.TemplateWindow):
         else:
             return False
 
+    # Pegar os dados das entradas do Usuario
     def getEntryUsuario(self):
         pass
 
