@@ -22,7 +22,7 @@ class Connection:
                 "tipo"	TEXT NOT NULL,
                 "login"	TEXT NOT NULL,
                 "senha"	TEXT NOT NULL,
-                "observacoes"	TEXT
+                "observacao"	TEXT
             );
         """)
         self.cursor.execute("""
