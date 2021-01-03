@@ -16,7 +16,7 @@ class Connection:
     def createTables(self):
         self.connectDB()
         self.cursor.execute("""
-            CREATE TABLE "senhas" (
+            CREATE TABLE IF NOT EXISTS "senhas" (
                 "id"	INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                 "nome"	TEXT NOT NULL,
                 "tipo"	TEXT NOT NULL,
@@ -24,7 +24,8 @@ class Connection:
                 "senha"	TEXT NOT NULL,
                 "observacoes"	TEXT
             );
-        
+        """)
+        self.cursor.execute("""
             CREATE TABLE IF NOT EXISTS "usuario" (
                 "id"	INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
                 "cpf"	TEXT NOT NULL UNIQUE,
