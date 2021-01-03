@@ -1,19 +1,24 @@
 import src.view.templateWindow as tw
 import tkinter as tk
 import tkinter.ttk as ttk
+import src.controller.senhasController as sc
 
 
 class SenhasView(tw.TemplateWindow):
-    def __init__(self):
+    def __init__(self, root):
+        self.root = root
         self.root = tk.Tk()
         # Configurações da Janela
-        super().__init__(self.root, 'Gerenciador de Senhas', menu=True)
+        super().__init__(self.root, 'Gerenciador de Senhas', size='750x550',menu=True)
 
-        self.framesWindow()
-        self.labels()
-        self.entrys()
-        self.buttons()
-        self.lists()
+        self.senhas_controller = sc.SenhasController()
+
+        self.framesWindow() # Cria os Frames
+        self.labels()       # Cria as Labels
+        self.entrys()       # Cria as Entrys
+        self.buttons()      # Cria os Buttons
+        self.lists()        # Cria a Lista
+        self.listSenhas()   # Insere os dados na Lista
 
     def start(self):
         self.root.mainloop()
@@ -150,12 +155,12 @@ class SenhasView(tw.TemplateWindow):
         self.trv_senhas.heading('#6', text='Obs.')
 
         self.trv_senhas.column('#0', width=1)
-        self.trv_senhas.column('#1', width=49)
-        self.trv_senhas.column('#2', width=50)
+        self.trv_senhas.column('#1', width=19)
+        self.trv_senhas.column('#2', width=30)
         self.trv_senhas.column('#3', width=100)
         self.trv_senhas.column('#4', width=100)
         self.trv_senhas.column('#5', width=100)
-        self.trv_senhas.column('#6', width=100)
+        self.trv_senhas.column('#6', width=140)
 
         self.trv_senhas.place(relx=0.00, rely=0.00, relwidth=0.96, relheight=0.99)
 
@@ -165,6 +170,9 @@ class SenhasView(tw.TemplateWindow):
 
         self.scroll_list_senhas.place(relx=0.96, rely=0.00,
                                relwidth=0.04, relheight=0.97)
+
+        # Logica do Duplo Click
+        self.trv_senhas.bind('<Double-1>', self.onDoubleClick)
 
         # Lista de Usuario
         self.trv_usuarios = ttk.Treeview(self.fra_bottom_usuario, height=3, column=(
@@ -215,11 +223,11 @@ class SenhasView(tw.TemplateWindow):
     # Pegar os dados das entradas da Senha
     def getEntrySenha(self):
         self.codigo_senha = str(self.ent_codigo_senha.get()).strip()
-        self.nome_senha = str(self.ent_nome_senha.get()).strip()
+        self.nome_senha = str(self.ent_nome_senha.get()).strip().lower()
         self.login_senha = str(self.ent_login_senha.get()).strip()
         self.senha_senha = str(self.ent_senha_senha.get()).strip()
-        self.observacao_senha = str(self.ent_observacao_senha.get('1.0', tk.END)).strip()
-        self.tipo_senha = self.tip_var_senha.get()
+        self.observacao_senha = str(self.ent_observacao_senha.get('1.0', tk.END)).strip().lower()
+        self.tipo_senha = self.tip_var_senha.get().lower()
 
         condi = [
             self.nome_senha != '',
@@ -236,20 +244,46 @@ class SenhasView(tw.TemplateWindow):
     def getEntryUsuario(self):
         pass
 
+    # Função de duplo click na lista de usuarios para setar ele nos campos
+    def onDoubleClick(self, event):
+        self.clearEntrySenha()
+        self.trv_senhas.selection()
+
+        for i in self.trv_senhas.selection():
+            col1, col2, col3, col4, col5, col6 = self.trv_senhas.item(i, 'values')
+            self.ent_codigo_senha.insert(tk.END, col1)
+            self.tip_var_senha.set(col2.capitalize())
+            self.ent_nome_senha.insert(tk.END, col3.capitalize())
+            self.ent_login_senha.insert(tk.END, col4)
+            self.ent_senha_senha.insert(tk.END, col5)
+            self.ent_observacao_senha.insert(tk.END, col6.capitalize())
+
+    # Lista todos os dados de senhas na list
+    def listSenhas(self):
+        self.clearEntrySenha()
+        self.clearListSenhas()
+        dados = self.senhas_controller.searchAllSenhas()
+        for dado in dados:
+            self.trv_senhas.insert("", tk.END, values=dado)
+
     # Passa os dados das Entrys para o controller salvar no banco
     def saveSenha(self):
         x = self.getEntrySenha()
 
         if x:
             # Chamar função do controller pra salvar no Banco
-            print('salvar ', self.nome_senha)
+            ret = self.senhas_controller.saveSenha(
+                self.nome_senha, self.tipo_senha, self.login_senha, self.senha_senha,
+                self.observacao_senha
+            )
 
             # Se o cadastro for bem sucedido mostrar ok, senao erro
-            if True:
+            if ret[0]:
                 self.clearEntrySenha()
+                self.listSenhas()
                 self.popup(tip=1, tit='ATENÇÂO', msg='Senha salva com sucesso.')
             else:
-                self.popup(tip=3, tit='ERRO', msg='Erro ao salvar senha.(ERRO)')
+                self.popup(tip=3, tit='ERRO', msg='Erro ao salvar senha. ' + ret[1])
         else:
             self.popup(tip=2, tit='ATENÇÂO', msg='Preencha os campos obrigatórios.')
 
@@ -260,14 +294,18 @@ class SenhasView(tw.TemplateWindow):
         if self.codigo_senha != '':
             if x:
                 # Chamar função do controller pra alterar no Banco
-                print('alterar ', self.nome_senha)
+                ret = self.senhas_controller.updateSenha(
+                    self.codigo_senha, self.nome_senha, self.tipo_senha, self.login_senha,
+                    self.senha_senha, self.observacao_senha
+                )
 
                 # Se a alteração for bem sucedida mostrar ok, senao erro
-                if True:
+                if ret[0]:
                     self.clearEntrySenha()
+                    self.listSenhas()
                     self.popup(tip=1, tit='ATENÇÂO', msg='Senha alterada com sucesso.')
                 else:
-                    self.popup(tip=3, tit='ERRO', msg='Erro ao alterar senha.(ERRO)')
+                    self.popup(tip=3, tit='ERRO', msg='Erro ao alterar senha. ' + ret[1])
             else:
                 self.popup(tip=2, tit='ATENÇÂO', msg='Preencha os campos obrigatórios.')
         else:
@@ -279,11 +317,18 @@ class SenhasView(tw.TemplateWindow):
 
         if self.nome_senha != '':
             # Chamar função do controller pra pesquisar no Banco
-            print('pesquisando')
+            ret = self.senhas_controller.searchSenha(self.nome_senha)
 
             # Se o dado for encontrado ok, senao erro
-            if True:
-                print('encontrou')
+            if ret is not None:
+                # Inserindo os dados encontrados nos Entrys
+                self.clearEntrySenha()
+                self.ent_codigo_senha.insert(tk.END, (ret[0][0]))
+                self.tip_var_senha.set((ret[0][1]).capitalize())
+                self.ent_nome_senha.insert(tk.END, (ret[0][2]).capitalize())
+                self.ent_login_senha.insert(tk.END, ret[0][3])
+                self.ent_senha_senha.insert(tk.END, ret[0][4])
+                self.ent_observacao_senha.insert(tk.END, (ret[0][5]).capitalize())
             else:
                 self.popup(tip=2, tit='ATENÇÂO', msg='Senha não encontrada.')
         else:
@@ -295,13 +340,14 @@ class SenhasView(tw.TemplateWindow):
 
         if self.codigo_senha != '':
             # Chamar função do controller pra apagar no Banco
-            print('alterar ', self.nome_senha)
+            ret = self.senhas_controller.deleteSenha(self.codigo_senha)
 
             # Se for apagado com sucesso mostrar ok, senao erro
-            if True:
+            if ret[0]:
                 self.clearEntrySenha()
+                self.listSenhas()
                 self.popup(tip=1, tit='ATENÇÂO', msg='Senha apagada com sucesso.')
             else:
-                self.popup(tip=3, tit='ERRO', msg='Erro ao apagar senha.(ERRO)')
+                self.popup(tip=3, tit='ERRO', msg='Erro ao apagar senha. ' + ret[1])
         else:
             self.popup(tip=2, tit='ATENÇÂO', msg='Selecione ou pesquise uma senha.')
