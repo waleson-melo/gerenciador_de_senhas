@@ -1,9 +1,9 @@
-# import src.view.senhasView as sev
-import src.controller.senhasController as sc
+# import src.controller.senhasController as sc
+import src.controller.mainWindowController as mwc
 
 
 if __name__ == '__main__':
-    # sev = sev.SenhasView()
-    # sev.start()
-    sec = sc.SenhasController()
-    sec.start()
+    # sec = sc.SenhasController()
+    # sec.start()
+    mec = mwc.MainWindowController()
+    mec.run()
