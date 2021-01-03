@@ -116,17 +116,17 @@ class SenhasView(tw.TemplateWindow):
     def buttons(self):
         # Aba 1 Senhas
         self.btn_salvar_senha = tk.Button(self.fra_top_senha, text='Salvar', bd=3)
-        self.btn_alterar_senha = tk.Button(self.fra_top_senha, text='Alterar', bd=3)
+        self.btn_limpar_senha = tk.Button(self.fra_top_senha, text='Limpar', bd=3)
         self.btn_pesquisar_senha = tk.Button(self.fra_top_senha, text='Pesquisar', bd=3)
         self.btn_apagar_senha = tk.Button(self.fra_top_senha, text='Apagar', bd=3)
 
         self.btn_salvar_senha.place(relx=0.78, rely=0.16, relwidth=0.18, relheight=0.21)
-        self.btn_alterar_senha.place(relx=0.78, rely=0.37, relwidth=0.18, relheight=0.21)
+        self.btn_limpar_senha.place(relx=0.78, rely=0.37, relwidth=0.18, relheight=0.21)
         self.btn_pesquisar_senha.place(relx=0.78, rely=0.58, relwidth=0.18, relheight=0.21)
         self.btn_apagar_senha.place(relx=0.78, rely=0.79, relwidth=0.18, relheight=0.21)
 
         self.btn_salvar_senha['command'] = self.saveSenha
-        self.btn_alterar_senha['command'] = self.updateSenha
+        self.btn_limpar_senha['command'] = self.clearEntrySenha
         self.btn_pesquisar_senha['command'] = self.searchSenha
         self.btn_apagar_senha['command'] = self.deleteSenha
 
@@ -271,28 +271,22 @@ class SenhasView(tw.TemplateWindow):
         x = self.getEntrySenha()
 
         if x:
-            # Chamar função do controller pra salvar no Banco
-            ret = self.senhas_controller.saveSenha(
-                self.nome_senha, self.tipo_senha, self.login_senha, self.senha_senha,
-                self.observacao_senha
-            )
+            # Verificado se o campo codigo esta vazio, se estiver a senha é salva como nova, senao e alterada
+            if self.codigo_senha == '':
+                # Chamar função do controller pra salvar no Banco
+                ret = self.senhas_controller.saveSenha(
+                    self.nome_senha, self.tipo_senha, self.login_senha, self.senha_senha,
+                    self.observacao_senha
+                )
 
-            # Se o cadastro for bem sucedido mostrar ok, senao erro
-            if ret[0]:
-                self.clearEntrySenha()
-                self.listSenhas()
-                self.popup(tip=1, tit='ATENÇÂO', msg='Senha salva com sucesso.')
+                # Se o cadastro for bem sucedido mostrar ok, senao erro
+                if ret[0]:
+                    self.clearEntrySenha()
+                    self.listSenhas()
+                    self.popup(tip=1, tit='ATENÇÂO', msg='Senha salva com sucesso.')
+                else:
+                    self.popup(tip=3, tit='ERRO', msg='Erro ao salvar senha. ' + ret[1])
             else:
-                self.popup(tip=3, tit='ERRO', msg='Erro ao salvar senha. ' + ret[1])
-        else:
-            self.popup(tip=2, tit='ATENÇÂO', msg='Preencha os campos obrigatórios.')
-
-    # Passa os dados das Entrys para o controller alterar no banco
-    def updateSenha(self):
-        x = self.getEntrySenha()
-
-        if self.codigo_senha != '':
-            if x:
                 # Chamar função do controller pra alterar no Banco
                 ret = self.senhas_controller.updateSenha(
                     self.codigo_senha, self.nome_senha, self.tipo_senha, self.login_senha,
@@ -306,10 +300,8 @@ class SenhasView(tw.TemplateWindow):
                     self.popup(tip=1, tit='ATENÇÂO', msg='Senha alterada com sucesso.')
                 else:
                     self.popup(tip=3, tit='ERRO', msg='Erro ao alterar senha. ' + ret[1])
-            else:
-                self.popup(tip=2, tit='ATENÇÂO', msg='Preencha os campos obrigatórios.')
         else:
-            self.popup(tip=2, tit='ATENÇÂO', msg='Selecione ou pesquise uma senha.')
+            self.popup(tip=2, tit='ATENÇÂO', msg='Preencha os campos obrigatórios.')
 
     # Passa os dados das Entrys para o controller pesquisar no banco
     def searchSenha(self):
