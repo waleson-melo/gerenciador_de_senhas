@@ -6,10 +6,6 @@ class UsuarioController:
     def __init__(self):
         self.usuario_model = um.UsuarioModel()
 
-    def start(self):
-        sev = sv.SenhasView(self)
-        sev.start()
-
     def searchAllUsuarios(self):
         return self.usuario_model.selectAll()
 
