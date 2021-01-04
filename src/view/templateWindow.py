@@ -3,12 +3,12 @@ import tkinter.messagebox as mb
 
 
 class TemplateWindow:
-    def __init__(self, root, name="Janela", size="675x550", menu=False, resx=False, resy=False):
+    def __init__(self, root, name="Janela", size="675x550", menu=False, resx=False, resy=False, minx=550, miny=500):
         self.root = root
         self.root.title(name)
         self.root.geometry(size)
         self.root.resizable(resx, resy)
-        self.root.minsize(550, 500)
+        self.root.minsize(minx, miny)
 
         self.fra_root = tk.Frame(self.root)
         # self.fra_root['bg'] = 'blue'
@@ -48,5 +48,3 @@ class TemplateWindow:
         elif tip == 4:
             # Ask Yes, No
             return mb.askyesno(title=tit, message=msg)
-
-

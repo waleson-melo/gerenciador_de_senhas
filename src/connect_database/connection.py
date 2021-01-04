@@ -35,4 +35,13 @@ class Connection:
             );
         """)
 
+        # se a quantidade for 0 é adcionado um usuario padrao
+        quant_usuario = self.cursor.execute("""
+            SELECT count(1) FROM usuario
+        """).fetchall()
+        quant_usuario = list(quant_usuario)[0]
+        if quant_usuario[0] == 0:
+            self.cursor.execute("""
+                INSERT INTO usuario (cpf, nome, senha) VALUES ('00000000000', 'admin', 'admin')
+            """)
         self.desconectDB()
