@@ -1,6 +1,6 @@
-import src.controller.mainWindowController as mwc
+import src.controller.loginController as lc
 
 
 if __name__ == '__main__':
-    mec = mwc.MainWindowController()
-    mec.run()
+    lgc = lc.LoginController()
+    lgc.run()
