@@ -3,6 +3,7 @@ import tkinter.ttk as ttk
 
 import src.view.templateWindow as tw
 import src.view.senhasView as sv
+import src.view.usuarioView as uv
 
 
 class MainWindowView(tw.TemplateWindow):
@@ -18,13 +19,16 @@ class MainWindowView(tw.TemplateWindow):
             self.fra_bottom_senha, self.fra_bottom_usuario
         )
 
+        self.usv = uv.UsuarioView(
+            self.fra_top_senha, self.fra_top_usuario,
+            self.fra_bottom_senha, self.fra_bottom_usuario
+        )
+
         self.labels()       # Cria as Labels
         self.entrys()       # Cria as Entrys
         self.buttons()      # Cria os Buttons
         self.lists()        # Cria a Lista
         self.addDadoList()   # Insere os dados na Lista
-        # self.listUsuario()  # Insere os dados na Lista
-
 
     def start(self):
         self.root.mainloop()
@@ -61,15 +65,20 @@ class MainWindowView(tw.TemplateWindow):
 
     def labels(self):
         self.sev.labelsSenha()
+        self.usv.labelsUsuario()
 
     def entrys(self):
         self.sev.entrysSenha()
+        self.usv.entrysUsuario()
 
     def buttons(self):
         self.sev.buttonsSenha()
+        self.usv.buttonsUsuario()
 
     def lists(self):
         self.sev.listSenha()
+        self.usv.listUsuario()
 
     def addDadoList(self):
         self.sev.addSenhaslist()
+        self.usv.addUsuariolist()
