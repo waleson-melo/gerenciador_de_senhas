@@ -1,4 +1,3 @@
-# import src.controller.senhasController as sc
 import src.controller.mainWindowController as mwc
 
 
