@@ -1,7 +1,6 @@
 import tkinter as tk
 import tkinter.ttk as ttk
 
-import src.view.loginView as lv
 import src.view.templateWindow as tw
 import src.view.senhasView as sv
 import src.view.usuarioView as uv
@@ -14,8 +13,6 @@ class MainWindowView(tw.TemplateWindow):
         super().__init__(self.root, 'Gerenciador de Senhas', size='750x550',menu=True)
 
         self.framesWindow() # Cria os Frames
-
-        self.lgv = lv.LoginView(self.root)
 
         self.sev = sv.SenhasView(
             self.fra_top_senha, self.fra_top_usuario,
@@ -31,18 +28,10 @@ class MainWindowView(tw.TemplateWindow):
         self.entrys()       # Cria as Entrys
         self.buttons()      # Cria os Buttons
         self.lists()        # Cria a Lista
-        # self.addDadoList()   # Insere os dados na Lista
-
-        self.login()
+        self.addDadoList()   # Insere os dados na Lista
 
     def start(self):
         self.root.mainloop()
-
-    # Função do Login
-    def login(self):
-        x = self.lgv.login()
-        if False:
-            self.addDadoList()   # Insere os dados na Lista
 
     # Layout dos frames ta tela
     def framesWindow(self):
