@@ -17,6 +17,22 @@ class TemplateWindow:
         if menu:
             self.menuBar()
 
+    def window(self, root, name="JanelaSecundaria", size="675x550", resx=False, resy=False, closeAll=False):
+        self.root2 = tk.Toplevel()
+        self.root2.title(name)
+        self.root2.geometry(size)
+        self.root2.resizable(resx, resy)
+        self.root2.minsize(75, 75)
+        self.root2.transient(root)
+        self.root2.focus_force()
+        self.root2.grab_set()
+
+        self.fra_root2 = tk.Frame(self.root2)
+        self.fra_root2.place(relx=0.01, rely=0.01, relwidth=0.98, relheight=0.98)
+
+        if closeAll:
+            self.root2.protocol("WM_DELETE_WINDOW", self.quit)
+
     # Menu da Janela
     def menuBar(self):
         men_bar = tk.Menu(self.root)
@@ -33,6 +49,9 @@ class TemplateWindow:
     # Função de fechar a Janela
     def quit(self):
         self.root.destroy()
+
+    def quitSecundaria(self):
+        self.root2.destroy()
 
     # Função de Popup
     def popup(self, tip=1, tit="Titulo", msg="Menssagem"):
