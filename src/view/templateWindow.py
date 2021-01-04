@@ -43,6 +43,10 @@ class TemplateWindow:
             # Warning
             mb.showwarning(title=tit, message=msg)
         elif tip == 3:
+            # Error
             mb.showerror(title=tit, message=msg)
+        elif tip == 4:
+            # Ask Yes, No
+            return mb.askyesno(title=tit, message=msg)
 
 
