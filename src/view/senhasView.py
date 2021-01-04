@@ -227,15 +227,17 @@ class SenhasView(tw.TemplateWindow):
         self.getEntrySenha()
 
         if self.codigo_senha != '':
-            # Chamar função do controller pra apagar no Banco
-            ret = self.senhas_controller.deleteSenha(self.codigo_senha)
+            yesno = self.popup(tip=4, tit='ATENÇÂO', msg='Deseja apagar esta senha?')
+            if yesno:
+                # Chamar função do controller pra apagar no Banco
+                ret = self.senhas_controller.deleteSenha(self.codigo_senha)
 
-            # Se for apagado com sucesso mostrar ok, senao erro
-            if ret[0]:
-                self.clearEntrySenha()
-                self.addSenhaslist()
-                self.popup(tip=1, tit='ATENÇÂO', msg='Senha apagada com sucesso.')
-            else:
-                self.popup(tip=3, tit='ERRO', msg='Erro ao apagar senha. ' + ret[1])
+                # Se for apagado com sucesso mostrar ok, senao erro
+                if ret[0]:
+                    self.clearEntrySenha()
+                    self.addSenhaslist()
+                    self.popup(tip=1, tit='ATENÇÂO', msg='Senha apagada com sucesso.')
+                else:
+                    self.popup(tip=3, tit='ERRO', msg='Erro ao apagar senha. ' + ret[1])
         else:
             self.popup(tip=2, tit='ATENÇÂO', msg='Selecione ou pesquise uma senha.')
