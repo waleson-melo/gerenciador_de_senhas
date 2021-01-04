@@ -213,16 +213,18 @@ class UsuarioView(tw.TemplateWindow):
         self.getEntryUsuario()
 
         if self.codigo_usuario != '':
-            # Chamar função do controller pra apagar no Banco
-            ret = self.usuario_controller.deleteUsuario(self.codigo_usuario)
+            yesno = self.popup(tip=4, tit='ATENÇÂO', msg='Deseja apagar este usuário?')
+            if yesno:
+                # Chamar função do controller pra apagar no Banco
+                ret = self.usuario_controller.deleteUsuario(self.codigo_usuario)
 
-            # Se for apagado com sucesso mostrar ok, senao erro
-            if ret[0]:
-                self.clearEntryUsuario()
-                self.addUsuariolist()
-                self.popup(tip=1, tit='ATENÇÂO', msg='Usuário apagado com sucesso.')
-            else:
-                self.popup(tip=3, tit='ERRO', msg='Erro ao apagar usuário. ' + ret[1])
+                # Se for apagado com sucesso mostrar ok, senao erro
+                if ret[0]:
+                    self.clearEntryUsuario()
+                    self.addUsuariolist()
+                    self.popup(tip=1, tit='ATENÇÂO', msg='Usuário apagado com sucesso.')
+                else:
+                    self.popup(tip=3, tit='ERRO', msg='Erro ao apagar usuário. ' + ret[1])
         else:
             self.popup(tip=2, tit='ATENÇÂO', msg='Selecione ou pesquise um usuário.')
 
