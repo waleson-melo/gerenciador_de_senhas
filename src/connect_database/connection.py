@@ -1,4 +1,5 @@
 import sqlite3
+import os
 
 
 class Connection:
@@ -6,6 +7,8 @@ class Connection:
         self.createTables()
 
     def connectDB(self):
+        if not os.path.isdir('data_base'):
+            os.mkdir('data_base')
         self.conn = sqlite3.connect('data_base/dbsistema.db')
         self.cursor = self.conn.cursor()
 
