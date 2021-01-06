@@ -7,9 +7,9 @@ class Connection:
         self.createTables()
 
     def connectDB(self):
-        if not os.path.isdir('data_base'):
-            os.mkdir('data_base')
-        self.conn = sqlite3.connect('data_base/dbsistema.db')
+        if not os.path.isdir(".gerenciador_de_senha/data_base"):
+            os.makedirs(".gerenciador_de_senha/data_base")
+        self.conn = sqlite3.connect(".gerenciador_de_senha/data_base/dbsistema.db")
         self.cursor = self.conn.cursor()
 
     def desconectDB(self):
