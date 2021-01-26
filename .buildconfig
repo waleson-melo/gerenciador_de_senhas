@@ -1,0 +1,11 @@
+[default]
+name=Default
+runtime=host
+toolchain=default
+config-opts=
+run-opts=
+prefix=/home/waleson-melo/.cache/gnome-builder/install/gerenciador_de_senhas/host
+app-id=
+postbuild=
+prebuild=
+default=true
